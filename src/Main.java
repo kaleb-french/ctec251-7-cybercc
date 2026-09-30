@@ -1,31 +1,41 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Scanner;
 
 public class Main {
     static void main() {
         LegacyFirewall oldFirewall = new LegacyFirewall();
         FirewallAdapter firewall = new FirewallAdapter(oldFirewall);
-        NetworkTrafficController net = new NetworkTrafficController();
-        UserAccessManager uam = new UserAccessManager();
-        EncryptionService es = new EncryptionService();
+        CommandCenterFacade command = new CommandCenterFacade();
+        Scanner scan = new Scanner(System.in);
 
-        firewall.setSecurityLevel(5);
-        firewall.logEvent("User: Admin - changed secureity level.");
-        //lockdown
-        net.blockPort(8080);
-        net.blockPort(443);
-        List<String> users = new ArrayList<>();
-        users.add("guest_user1");
-        users.add("Sus_Account");
-        users.add("ImaHacker");
-        uam.lockUserAccounts(users);
-        es.encryptDatabase("Customer_Records");
-        net.divertTraffic();
-        //allclear
-        net.unblockPort(8080);
-        net.unblockPort(443);
-        uam.unlockUserAccounts(users);
-        es.decryptDatabase("Customer_Records");
-        es.verifyIntegrity();
+        boolean running = true;
+        while(running){
+            System.out.println("Please enter a message: ");
+            String input = scan.nextLine();
+            firewall.logEvent(input);
+            System.out.println("Please set a security level: ");
+            int level = scan.nextInt();
+            firewall.setSecurityLevel(level);
+
+            System.out.println("PLease make a choice: \n 1. System Lock Down \n 2. Lift System Lock Down \n 3. enter maintaince mode \n 4. exit");
+            scan.nextLine();
+            String choice = scan.nextLine();
+            switch(choice) {
+                case "1":
+                    command.initiateEmergencyLockdown();
+                    break;
+                case "2":
+                    command.liftEmergencyLockdown();
+                    break;
+                case "3":
+                    command.enableMaintenanceMode();
+                    break;
+                case "4":
+                    running = false;
+                    break;
+                default:
+                    System.out.println("Invalid choice");
+                    continue;
+            }
+        }
     }
 }

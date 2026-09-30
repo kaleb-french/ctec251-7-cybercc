@@ -11,6 +11,9 @@ public class NetworkTrafficController {
     void divertTraffic(){
         System.out.println("All traffic is dirverted to 172.16.42.11");
     }
+    void stopDivertTraffic(){
+         System.out.println("All traffic is not longer being dirverted to 172.16.42.11");
+    }
     void monitorPacketLoss(){
 
     }
